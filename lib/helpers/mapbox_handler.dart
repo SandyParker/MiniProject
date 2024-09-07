@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+import '../main.dart';
 import '../requests/mapbox_directions.dart';
 import '../requests/mapbox_rev_geocoding.dart';
 import '../requests/mapbox_search.dart';
+import 'POI.dart';
 
 // ----------------------------- Mapbox Search Query -----------------------------
 String getValidatedQueryFromQuery(String query) {
@@ -74,6 +76,30 @@ Future<Map> getDirectionsAPIResponse(
     "distance": distance,
   };
   return modifiedResponse;
+}
+
+Future<Map> getDirectionsAPIResponsedir(LatLng currentLatLng, int index) async {
+  final response = await getCyclingRouteUsingMapbox(
+      currentLatLng,
+      LatLng(double.parse(POI[index]['coordinates']['latitude']),
+          double.parse(POI[index]['coordinates']['longitude'])));
+  Map geometry = response['routes'][0]['geometry'];
+  num duration = response['routes'][0]['duration'];
+  num distance = response['routes'][0]['distance'];
+  print('-------------------${POI[index]['name']}-------------------');
+  print(distance);
+  print(duration);
+
+  Map modifiedResponse = {
+    "geometry": geometry,
+    "duration": duration,
+    "distance": distance,
+  };
+  return modifiedResponse;
+}
+
+void saveDirectionsAPIResponse(int index, String response) {
+  sharedPreferences.setString('restaurant--$index', response);
 }
 
 LatLng getCenterCoordinatesForPolyline(Map geometry) {

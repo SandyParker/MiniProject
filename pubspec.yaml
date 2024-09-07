@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  carousel_slider:
   flutter_mapbox_navigation: ^0.0.26
   shared_preferences: ^2.0.13
   flutter_native_splash: ^2.0.4

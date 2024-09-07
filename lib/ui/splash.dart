@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+import '../helpers/POI.dart';
 import '../helpers/mapbox_handler.dart';
 import '../main.dart';
+//import '../requests/directions.dart';
 import '../screens/home.dart';
 
 class Splash extends StatefulWidget {
@@ -50,6 +54,11 @@ class _SplashState extends State<Splash> {
         (await getParsedReverseGeocoding(currentLocation))['place'];
     //print("Working?");
     print(currentAddress);
+    LatLng currentLatLng = LatLng(_locationData.latitude!, _locationData.longitude!);
+    for (int i = 0; i < POI.length; i++) {
+      Map modifiedResponse = await getDirectionsAPIResponsedir(currentLatLng, i);
+      saveDirectionsAPIResponse(i, json.encode(modifiedResponse));
+    }
 
     // Store the user location in sharedPreferences
     sharedPreferences.setDouble('latitude', _locationData.latitude!);
