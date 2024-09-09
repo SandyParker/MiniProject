@@ -34,7 +34,7 @@ class _ReviewRideState extends State<ReviewRide> {
 
     // initialise initialCameraPosition, address and trip end points
     _initialCameraPosition = CameraPosition(
-        target: getCenterCoordinatesForPolyline(geometry), zoom: 11);
+        target: getCenterCoordinatesForPolyline(geometry), zoom: 15);
 
     for (String type in ['source', 'destination']) {
       _kTripEndPoints
@@ -117,7 +117,7 @@ class _ReviewRideState extends State<ReviewRide> {
                 onMapCreated: _onMapCreated,
                 onStyleLoadedCallback: _onStyleLoadedCallback,
                 myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                minMaxZoomPreference: const MinMaxZoomPreference(11, 11),
+                //minMaxZoomPreference: const MinMaxZoomPreference(11, 11),
               ),
             ),
             reviewRideBottomSheet(context, distance, dropOffTime),

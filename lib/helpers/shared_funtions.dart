@@ -1,13 +1,17 @@
 import 'dart:convert';
 
+import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 //import 'package:flutter_mapbox_navigation/flutter_mapbox_navigation.dart';
 
 import '../main.dart';
 import 'POI.dart';
+import 'mapbox_handler.dart';
 //import 'full_map.dart';
 //import 'main.dart';
+
+Location _location = Location();
 
 LatLng getLatLngFromSharedPrefs() {
   return LatLng(sharedPreferences.getDouble('latitude')!,
@@ -38,4 +42,16 @@ Map getGeometryFromSharedPrefs(int index) {
 LatLng getLatLngFromRestaurantData(int index) {
   return LatLng(double.parse(POI[index]['coordinates']['latitude']),
       double.parse(POI[index]['coordinates']['longitude']));
+}
+
+Future<void> setsourceanddestination(List<Map> carouselData, int index) async {
+  LocationData _locationData = await _location.getLocation();
+  LatLng currentLocation = LatLng(_locationData.latitude!, _locationData.longitude!);
+  var response = await getParsedReverseGeocoding(currentLocation);
+  sharedPreferences.setString('source', jsonEncode(response));
+  print(sharedPreferences.getString('source'));
+  LatLng destination = getLatLngFromRestaurantData(carouselData[index]['index']);
+  var destresponse = await getParsedReverseGeocoding(destination);
+  sharedPreferences.setString('destination',  jsonEncode(destresponse));
+  print(sharedPreferences.getString('destination'));
 }

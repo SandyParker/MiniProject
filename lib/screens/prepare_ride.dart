@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:html';
+import 'package:location/location.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,7 +10,9 @@ import 'package:mapbox_turn_by_turn/widgets/endpoints_card.dart';
 import 'package:mapbox_turn_by_turn/widgets/search_listview.dart';
 
 import '../helpers/POI.dart';
+import '../helpers/mapbox_handler.dart';
 import '../helpers/shared_funtions.dart';
+import '../main.dart';
 import '../widgets/carousel_card.dart';
 import '../widgets/review_ride_fa_button.dart';
 
@@ -43,6 +49,8 @@ class _PrepareRideState extends State<PrepareRide> {
   int pageIndex = 0;
   bool accessed = false;
   late List<Widget> carouselItems;
+
+
 
   @override
   void initState()
@@ -160,7 +168,7 @@ class _PrepareRideState extends State<PrepareRide> {
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back)),
-        title: const Text('Mapbox Cabs'),
+        title: const Text('SVCENav'),
         actions: const [
           CircleAvatar(backgroundImage: AssetImage('assets/image/person.jpg')),
         ],
@@ -189,8 +197,9 @@ class _PrepareRideState extends State<PrepareRide> {
               scrollDirection: Axis.horizontal,
               onPageChanged:
                   (int index, CarouselPageChangedReason reason) async {
-                setState(() {
+                setState(()  {
                   pageIndex = index;
+                  setsourceanddestination(carouselData, index);
                 });
                 _addSourceAndLineLayer(index, true);
               },
